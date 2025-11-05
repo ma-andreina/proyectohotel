@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Hotel Indigo | Inicio</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+
+    <header class="header_principal" role="banner">
+        <div class="contenedor_header">
+            <div class="header_top">
+                <h1 class="logo_hotel">
+                    <a href="index.html">
+                        <img src="images/logo_indigo.png" alt="Logo Hotel Indigo" class="imagen_logo">
+                        <span class="nombre_hotel">Hotel Indigo</span>
+                    </a>
+                </h1>
+
+                <nav class="header_navbar" role="navigation" aria-label="Navegación principal">
+                    <ul class="lista_nav">
+                        <li class="item_nav"><a href="index.html">Inicio</a></li>
+                        <li class="item_nav"><a href="nosotros.html">Nosotros</a></li>
+                        <li class="item_nav"><a href="#">Habitaciones</a></li>
+                        <li class="item_nav"><a href="#">Servicios</a></li>
+                        <li class="item_nav"><a href="#">Restaurant</a></li>
+                        <li class="item_nav"><a href="#">Eventos</a></li>
+                        <li class="item_nav"><a href="#">Ubicacion</a></li>
+                        <li class="item_nav"><a href="#">Contacto</a></li>
+                    </ul>
+                </nav>
+
+                <div class="idioma" aria-label="Idioma del sitio">
+                    <img src="images/iconoidioma.png" alt="Icono idioma" class="icon_globe" aria-hidden="true">
+                    <span class="idioma_text">Español</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="seccion_busqueda hero_home">
+        <section class="contenedor_busqueda">
+            <h2>EXPERIMENTA EL LUJO URBANO</h2>
+
+
+            <form class="formulario_busqueda">
+                <div class="formulario_flex">
+                    <div class="campo_formulario campo_select">
+                        <label for="fecha_entrada">Check-in:</label>
+                        <input type="date" id="fecha_entrada" required>
+                    </div>
+
+                    <div class="campo_formulario campo_select">
+                        <label for="fecha_salida">Check-out:</label>
+                        <input type="date" id="fecha_salida" required>
+                    </div>
+
+                    <div class="campo_formulario campo_huesped">
+                        <label for="adultos">Adultos</label>
+                        <div class="huesped_item">
+                            <input id="adultos" type="number" value="1" min="1" max="5">
+                        </div>
+                    </div>
+
+                    <div class="campo_formulario campo_huesped">
+                        <label for="habitaciones">Habitaciones</label>
+                        <div class="huesped_item">
+                            <input id="habitaciones" type="number" value="1" min="1" max="5">
+                        </div>
+                    </div>
+
+                    <div class="campo_formulario campo_buscar">
+                        <button type="submit" class="boton_principal boton_gold">Reserva Ahora</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <div class="after_hero">
+
+        <section class="seccion_habitaciones" aria-label="Habitaciones Destacadas">
+            <div class="contenedor">
+                <div class="titulo_seccion_home">
+                    <h2>Habitaciones Destacadas</h2>
+                    <p>Elige el lujo y el confort que mereces.</p>
+                </div>
+
+                <div class="panel_habitaciones">
+                    <article class="habitacion_tarjeta">
+                        <img src="images/habitacion_king.jpeg" alt="Habitación King Deluxe" class="imagen_habitacion">
+                        <div class="contenido_tarjeta">
+                            <h3>King Deluxe</h3>
+                            <p>Una habitación espaciosa con cama king size y vistas a la ciudad.</p>
+                            <p class="precio_noche">Desde $250 / Noche</p>
+                            <div class="botones_tarjeta">
+                                <a href="#" class="boton_principal boton_dark boton-detalles">Ver Detalles</a>
+                                <a href="#" class="boton_principal boton_gold boton-reservar">Reservar Ahora</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="habitacion_tarjeta">
+                        <img src="images/habitacion_queen.jpeg" alt="Habitación Queen Superior" class="imagen_habitacion">
+                        <div class="contenido_tarjeta">
+                            <h3>Queen Superior</h3>
+                            <p>Doble comodidad con dos camas queen y un diseño moderno.</p>
+                            <p class="precio_noche">Desde $180 / Noche</p>
+                            <div class="botones_tarjeta">
+                                <a href="#" class="boton_principal boton_dark boton-detalles">Ver Detalles</a>
+                                <a href="#" class="boton_principal boton_gold boton-reservar">Reservar Ahora</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Suite Ejecutiva eliminada según solicitud -->
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion_servicios" aria-label="Servicios del hotel">
+            <div class="contenedor_servicios">
+                <div class="services_scroll" role="list">
+                    <div class="service_item" role="listitem">
+                        <img src="images/serv_restaurante.jpg" alt="Restaurante" />
+                        <span>Restaurante</span>
+                    </div>
+                    <div class="service_item" role="listitem">
+                        <img src="images/serv_terraza.jpg" alt="Terraza" />
+                        <span>Terraza</span>
+                    </div>
+                    <div class="service_item" role="listitem">
+                        <img src="images/serv_taxi.jpg" alt="Servicio de taxi" />
+                        <span>Servicio de taxi</span>
+                    </div>
+                    <div class="service_item" role="listitem">
+                        <img src="images/serv_bar.jpg" alt="Bar" />
+                        <span>Bar</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion_mapa" aria-label="Mapa de ubicación">
+            <div class="map_wrapper">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.01907424909!2d-3.703790684681137!3d40.416775979363106!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd42288e6b0f4e7b%3A0x0!2zMzXCsDI1JzAwLjAiTiAzwrAzNyc0MC4wIlc!5e0!3m2!1ses!2ses!4v1600000000000!5m2!1ses!2ses" width="100%" height="360" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </section>
+
+        <footer class="site_footer" role="contentinfo">
+            <div class="footer_inner">
+                <div class="footer_col footer_explora">
+                    <h5>EXPLORA</h5>
+                    <ul>
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Habitaciones</a></li>
+                        <li><a href="#">Ubicación</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer_col footer_compania">
+                    <div class="footer_logo_wrapper"> 
+                        <img src="images/logo_indigo.png" alt="Logo Hotel Indigo" class="footer_logo_img">
+                    </div>
+                    <h5>COMPAÑÍA</h5>
+                    <ul>
+                        <li><a href="nosotros.html">Historia</a></li>
+                        <li><a href="#">Contacto</a></li>
+                        <li><a href="#">Aviso Legal</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer_col footer_social">
+                    <h5>SOCIAL</h5>
+                    <div class="social_icons">
+                        <a href="#" aria-label="Facebook">
+                            <img src="images/logofacebook.png" alt="Facebook" class="social_icon_img">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="images/logoinstagram.png" alt="Instagram" class="social_icon_img">
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <img src="images/logotwitter.png" alt="Twitter" class="social_icon_img">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer_bottom">© 2024 Hotel Indigo. Todos los derechos reservados.</div>
+        </footer>
+
+    </div> <script src="js/app.js"></script>
+</body>
+</html>

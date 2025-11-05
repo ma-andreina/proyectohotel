@@ -1,0 +1,433 @@
+/* ---------------------------------------------------- */
+/* 00. Base y Variables */
+/* ---------------------------------------------------- */
+
+:root {
+    /* Colores Principales */
+    --color-acento: #D0A75F; /* Dorado */
+    --color-principal-oscuro: #31333E; /* Marrón Oscuro */
+    --color-texto-claro: #F8F9FA; /* Blanco Roto */
+
+    /* Colores Secundarios */
+    --color-fondo-claro: #EFEFEF;
+    --color-fondo-gris: #D3D3D3;
+    --color-fondo-oscuro: #212529;
+
+    /* Bordes y Sombras */
+    --input-border-color: #CED4DA;
+    --input-border-alt: #ADB5BD;
+
+    /* Espaciado */
+    --espaciado-xsmall: 4px;
+    --espaciado-small: 8px;
+    --espaciado-medium: 16px;
+    --espaciado-large: 32px;
+}
+
+html {
+    box-sizing: border-box;
+    font-size: 100%;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--color-principal-oscuro);
+    background-color: var(--color-fondo-claro);
+    min-height: 100vh;
+}
+
+/* ---------------------------------------------------- */
+/* 01. Tipografía y Enlaces */
+/* ---------------------------------------------------- */
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: var(--espaciado-medium);
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+    color: var(--color-principal-oscuro);
+}
+
+h3 {
+    font-size: 1.75rem;
+    color: var(--color-acento);
+}
+
+p {
+    margin-bottom: var(--espaciado-medium);
+    font-size: 1rem;
+}
+
+a {
+    color: var(--color-principal-oscuro);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--color-acento);
+}
+
+/* ---------------------------------------------------- */
+/* 02. Layout y Contenedores */
+/* ---------------------------------------------------- */
+
+.contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--espaciado-large);
+}
+
+/* ---------------------------------------------------- */
+/* 03. Header y Navegación */
+/* ---------------------------------------------------- */
+
+.header_principal {
+    background-color: var(--color-principal-oscuro);
+    padding: var(--espaciado-small) 0;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+}
+
+.contenedor_header {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--espaciado-medium);
+}
+
+.header_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo_hotel a {
+    display: flex;
+    align-items: center;
+    color: var(--color-texto-claro);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.logo_hotel a:hover {
+    color: var(--color-acento);
+}
+
+.imagen_logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+}
+
+.header_navbar {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.lista_nav {
+    list-style: none;
+    display: inline-flex;
+    padding: 0;
+    margin: 0;
+}
+
+.item_nav {
+    margin: 0 15px;
+}
+
+.item_nav a {
+    color: var(--color-texto-claro);
+    padding: 10px 0;
+    display: block;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.item_nav a:hover,
+.item_nav a:focus {
+    color: var(--color-acento);
+    border-bottom: 2px solid var(--color-acento);
+}
+
+/* Selector del idioma */
+.idioma {
+    display: flex;
+    align-items: center;
+    color: var(--color-texto-claro);
+    font-size: 0.9rem;
+}
+
+.icon_globe {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+.idioma_text {
+    font-weight: 600;
+}
+
+/* ---------------------------------------------------- */
+/* 04. Sección de Búsqueda (Hero) */
+/* ---------------------------------------------------- */
+
+.seccion_busqueda {
+    background-color: var(--color-principal-oscuro);
+    color: var(--color-texto-claro);
+    padding: 100px 0 60px;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.seccion_busqueda::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgb(0 0 0 / 40%);
+    z-index: 2;
+}
+
+.contenedor_busqueda {
+    position: relative;
+    z-index: 3;
+    max-width: 800px;
+    padding: var(--espaciado-medium);
+}
+
+.contenedor_busqueda h2 {
+    color: var(--color-texto-claro);
+    font-size: 3rem;
+    margin-bottom: 0;
+    line-height: 1.1;
+}
+
+/* ---------------------------------------------------- */
+/* 05. Estilos de Formularios (Comunes) */
+/* ---------------------------------------------------- */
+
+.formulario_busqueda {
+    background-color: var(--color-texto-claro);
+    border-radius: 8px;
+    padding: var(--espaciado-large);
+    box-shadow: 0 4px 15px rgb(0 0 0 / 10%);
+    margin-top: 30px;
+}
+
+.campo_formulario {
+    margin-bottom: var(--espaciado-medium);
+}
+
+.campo_formulario label {
+    display: block;
+    margin-bottom: var(--espaciado-small);
+    font-weight: 600;
+    color: var(--color-principal-oscuro);
+}
+
+.campo_formulario input[type="text"],
+.campo_formulario input[type="date"],
+.campo_formulario input[type="number"],
+.campo_formulario select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.campo_formulario input:focus,
+.campo_formulario select:focus {
+    border-color: var(--color-acento);
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(208 167 95 / 30%);
+}
+
+/* ---------------------------------------------------- */
+/* 06. Botones (Comunes) */
+/* ---------------------------------------------------- */
+
+.boton_principal {
+    display: inline-block;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+}
+
+.boton_gold {
+    background-color: var(--color-acento);
+    color: var(--color-principal-oscuro);
+}
+
+.boton_gold:hover {
+    background-color: #B88E4B; 
+    transform: translateY(-1px);
+}
+
+.boton_dark {
+    background-color: var(--color-principal-oscuro);
+    color: var(--color-texto-claro);
+}
+
+.boton_dark:hover {
+    background-color: #1A1C23; 
+}
+
+/* ---------------------------------------------------- */
+/* 07. Footer (Común) */
+/* ---------------------------------------------------- */
+
+.site_footer {
+    background-color: var(--color-fondo-oscuro);
+    color: var(--color-texto-claro);
+    padding-top: var(--espaciado-large);
+    font-size: 0.9rem;
+}
+
+.footer_inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--espaciado-large);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--espaciado-large);
+    flex-wrap: wrap;
+    padding-bottom: var(--espaciado-large);
+}
+
+.footer_col {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer_col h5 {
+    color: var(--color-acento);
+    margin-bottom: var(--espaciado-medium);
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.footer_col ul {
+    list-style: none;
+}
+
+.footer_col ul li {
+    margin-bottom: var(--espaciado-small);
+}
+
+.footer_col ul a {
+    color: var(--color-texto-claro);
+}
+
+.footer_col ul a:hover {
+    color: var(--color-acento);
+}
+
+.footer_logo_wrapper {
+    text-align: center;
+    margin-bottom: var(--espaciado-medium);
+}
+
+.footer_logo_img {
+    width: 60px;
+    height: 60px;
+}
+
+.social_icons {
+    display: flex;
+    gap: var(--espaciado-medium);
+}
+
+.social_icons img {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+}
+
+.social_icons a:hover img {
+    transform: scale(1.1);
+}
+
+.footer_bottom {
+    background-color: #1A1C20;
+    text-align: center;
+    padding: var(--espaciado-medium) 0;
+    font-size: 0.8rem;
+    border-top: 1px solid rgb(255 255 255 / 10%);
+}
+
+/* ---------------------------------------------------- */
+/* 08. Responsive Base */
+/* ---------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .header_top {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header_navbar {
+        margin: var(--espaciado-medium) 0;
+    }
+
+    .lista_nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .item_nav {
+        margin: 5px 0;
+    }
+
+    .idioma {
+        margin-top: var(--espaciado-small);
+    }
+}
+
+@media (max-width: 600px) {
+    .contenedor {
+        padding: var(--espaciado-medium);
+    }
+
+    .footer_inner {
+        flex-direction: column;
+        text-align: center;
+        padding: 0 var(--espaciado-medium);
+    }
+
+    .footer_col {
+        min-width: 100%;
+        margin-bottom: var(--espaciado-large);
+    }
+
+    .social_icons {
+        justify-content: center;
+    }
+}
