@@ -1,0 +1,184 @@
+{% extends "website/base.html" %}
+
+{% load static %}
+
+{% block title %}Paso 1: Reserva de Habitación{% endblock %}
+
+{% block content %}
+
+
+
+{# Indicador de Pasos Actualizado (3 Pasos) #}
+<div class="pasos_indicador"> 
+    <div class="paso_item activo" data-step="1">1. Huésped</div> 
+    <div class="paso_item" data-step="2">2. Estancia</div> 
+    <div class="paso_item" data-step="3">3. Confirmar</div> 
+</div>
+
+<section class="seccion_reserva">
+    <div class="contenedor contenedor_reserva"> 
+        
+        <div class="panel_reserva_contenido">
+            
+            <aside class="resumen_tarjeta" data-aos="fade-right"> 
+                <h2>Resumen (Habitación Seleccionada)</h2>
+                
+                {# Contenido del Resumen sin cambios para el ejemplo #}
+                <div class="resumen_item"><p><strong>Tipo Habitación:</strong></p><p>King Deluxe</p></div>
+                <div class="resumen_item"><p><strong>Número de Noches:</strong></p><p>1 Noche</p></div>
+                <div class="resumen_item"><p><strong>Precio Base:</strong></p><p>$280 / Noche</p></div>
+                
+                <div class="resumen_item resumen_total"><p><strong>SUBTOTAL:</strong></p><p class="color-acento">$1,400 USD</p></div>
+                <hr>
+                <div class="resumen_item"><p><strong>Impuestos (10%):</strong></p><p>$140 USD</p></div>
+                
+                <div class="resumen_item resumen_total">
+                    <p><strong>TOTAL ESTIMADO:</strong></p>
+                    <p class="color-acento">$1,540 USD</p>
+                </div>
+                
+                {# Aviso de Pago en Hotel #}
+                <div class="aviso_pago_hotel" style="margin-top: 20px; padding: 10px; border: 1px dashed #d4af37; font-size: 0.9em; text-align: center;">
+                    <strong>¡Atención!</strong> El pago total de la reserva ($1,540 USD) se realizará directamente en el hotel.
+                </div>
+            </aside>
+            
+            <form class="formulario_reserva" action="#" method="post">
+                {% csrf_token %} 
+                <div class="form_card_reserva">
+                    
+                    {# ======================================================= #}
+                    {# PASO 1: Huésped (Datos Personales) #}
+                    {# ======================================================= #}
+                    <div class="paso_formulario activo" data-step="1">
+                        
+                        <fieldset class="form__section">
+                            <legend>Información del Huésped Principal</legend>
+                            
+                            <div class="formulario_grid">
+                                <div class="campo_reserva">
+                                    <label for="nombre">Nombre Completo:</label>
+                                    <input id="nombre" name="nombre" type="text" placeholder="Nombre Apellido" required />
+                                </div>
+                                <div class="campo_reserva">
+                                    <label for="email">Correo Electrónico:</label>
+                                    <input id="email" name="email" type="email" placeholder="email@ejemplo.com" required autocomplete="email" />
+                                </div>
+                                <div class="campo_reserva">
+                                    <label for="telefono">Teléfono de Contacto:</label>
+                                    <input id="telefono" name="telefono" type="tel" placeholder="+58 412 1234567" />
+                                </div>
+                                
+
+                            </div>
+                        </fieldset>
+                        
+                        <div class="card__buttons">
+                            <button type="button" class="card__button--book" data-step-target="2">Siguiente</button>
+                        </div>
+                    </div>
+                    
+                    {# ======================================================= #}
+                    {# PASO 2: Estancia (Fechas y Extras) #}
+                    {# ======================================================= #}
+                    <div class="paso_formulario" data-step="2">
+                        
+                        <fieldset class="form__section">
+                            <legend>Detalles de la Estancia</legend>
+                            
+                            <div class="formulario_grid">
+                                
+                                {# RESTRICCIÓN: min="{% now 'Y-m-d' %}" para evitar fechas anteriores #}
+                                <div class="campo_reserva">
+                                    <label for="llegada">Fecha de Llegada:</label>
+                                    <input id="llegada" name="fecha_llegada" type="date" required min="{% now 'Y-m-d' %}" />
+                                </div>
+                                <div class="campo_reserva">
+                                    <label for="salida">Fecha de Salida:</label>
+                                    <input id="salida" name="fecha_salida" type="date" required min="{% now 'Y-m-d' %}" />
+                                </div>
+                                
+                                <div class="campo_reserva">
+                                    <label for="huespedes">Número de Huéspedes:</label>
+                                    <input id="huespedes" name="num_huespedes" type="number" value="1" min="1" required />
+                                </div>
+
+                                
+                                {# COLOCAR LISTA DESPLEGABLE CON DATOS IMPORTADOS #}
+                                <div class="campo_reserva">
+                                    <label for="servicios">Servicios/Solicitudes Adicionales:</label>
+                                    <textarea id="servicios" name="servicios_adicionales" rows="2" placeholder="Ej: Cuna extra, early check-in, etc."></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="card__buttons">
+                            <button type="button" class="card__button--details" data-step-target="1">Atrás</button>
+                            <button type="button" class="card__button--book" data-step-target="3">Siguiente</button>
+                        </div>
+                    </div>
+                    
+                    {# ======================================================= #}
+                    {# PASO 3: Confirmación por Email #}
+                    {# ======================================================= #}
+                    <div class="paso_formulario" data-step="3">
+                        <fieldset class="form__section confirmacion_pago">
+                            <legend>Confirmación Final</legend>
+
+                            <p style="margin-bottom: 20px; font-weight: 500;">
+                                Se ha enviado un código de confirmación de 6 dígitos al correo: <span class="color-acento">email@ejemplo.com</span>
+                            </p>
+                            
+                            {# Ventana para el Código de Confirmación #}
+                            <div class="campo_reserva campo_codigo" style="max-width: 300px; margin: 0 auto 30px;">
+                                <label for="codigo">Código de Confirmación:</label>
+                                <input id="codigo" name="codigo_confirmacion" type="text" pattern="\d{6}" placeholder="******" required maxlength="6" />
+                            </div>
+                            
+                            <p class="total">Total Estimado: <span class="color-acento">$1,540 USD</span></p>
+
+                            <div class="aviso_pago_final" style="margin-top: 15px; font-size: 0.9em; color: gray;">
+                                Al hacer clic en "Confirmar", usted acepta pagar la cantidad total en la recepción del hotel.
+                            </div>
+                        </fieldset>
+                        
+                        <div class="card__buttons">
+                            <button type="button" class="card__button--details" data-step-target="2">Atrás</button>
+                            {# Botón final para enviar el formulario #}
+                            <button type="submit" class="card__button--book">Confirmar Reserva</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const formContainer = document.querySelector('.form_card_reserva');
+    const stepIndicators = document.querySelectorAll('.paso_item');
+
+    document.querySelectorAll('[data-step-target]').forEach(button => {
+        button.addEventListener('click', function() {
+            const currentStep = this.closest('.paso_formulario').getAttribute('data-step');
+            const targetStep = this.getAttribute('data-step-target');
+
+            // 1. Ocultar el paso actual y mostrar el objetivo
+            document.querySelector(`.paso_formulario[data-step="${currentStep}"]`).classList.remove('activo');
+            document.querySelector(`.paso_formulario[data-step="${targetStep}"]`).classList.add('activo');
+
+            // 2. Actualizar el indicador de la barra de progreso
+            stepIndicators.forEach(indicator => {
+                indicator.classList.remove('activo');
+                if (parseInt(indicator.getAttribute('data-step')) <= parseInt(targetStep)) {
+                    indicator.classList.add('activo');
+                }
+            });
+        });
+    });
+});
+</script>
+
+{% endblock content %}
