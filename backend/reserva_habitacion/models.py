@@ -1,14 +1,107 @@
-from django.db import models
+# reserva_habitacion/models.py
 
+from django.db import models
+from django.contrib.auth.models import User 
+from habitacion.models import Habitacion
+from decimal import Decimal
+import uuid 
 
 class ReservaHabitacion(models.Model):
-    id = models.IntegerField(primary_key=True)
-    usuario_id = models.IntegerField(null=True)
-    habitacion_id = models.IntegerField(null=True)
+    # ESTADOS DE RESERVA
+    ESTADO_PENDIENTE = 'pendiente'
+    ESTADO_CONFIRMADA = 'confirmada'
+    ESTADO_CANCELADA = 'cancelada'
+    ESTADO_COMPLETADA = 'completada'
+
+    ESTADO_CHOICES = [
+        (ESTADO_PENDIENTE, 'Pendiente de Pago'),
+        (ESTADO_CONFIRMADA, 'Confirmada'),
+        (ESTADO_CANCELADA, 'Cancelada'),
+        (ESTADO_COMPLETADA, 'Completada (Check-Out)'),
+    ]
+
+    usuario = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='reservas_habitacion',
+        verbose_name='Cliente',
+        null=True,
+        blank=True
+    )
+    
+    habitacion = models.ForeignKey(
+        Habitacion, 
+        on_delete=models.RESTRICT,
+        related_name='reservas',
+        verbose_name='Habitación Reservada',
+        null=True,
+        blank=True
+    )
+    
+    fecha_checkin = models.DateField(verbose_name='Fecha Check-In', null=True, blank=True)
+    fecha_checkout = models.DateField(verbose_name='Fecha Check-Out', null=True, blank=True)
+    huespedes = models.PositiveSmallIntegerField(default=1, verbose_name='Número de Huéspedes')
+    
+    estado = models.CharField(
+        max_length=20, 
+        choices=ESTADO_CHOICES,
+        default=ESTADO_PENDIENTE,
+        verbose_name='Estado de la Reserva'
+    )
+    codigo_confirmacion = models.CharField(
+        max_length=50, 
+        unique=True, 
+        blank=True,
+        verbose_name='Código de Confirmación'
+    )
+    
+    total = models.DecimalField(
+        max_digits=10, 
+        decimal_places=2, 
+        default=0.00,
+        verbose_name='Total de la Reserva'
+    )
+    
+    fecha_creacion = models.DateTimeField(
+        auto_now_add=True, 
+        verbose_name='Fecha de Creación',
+        null=True,
+        blank=True
+    )
 
     class Meta:
         db_table = 'reserva_habitacion'
-        managed = True
-
+        verbose_name = 'Reserva de Habitación'
+        verbose_name_plural = 'Reservas de Habitaciones'
+        ordering = ['-fecha_creacion']
+        
     def __str__(self):
-        return str(self.id)
+        usuario_str = self.usuario.username if self.usuario else "Sin Usuario"
+        return f'Reserva #{self.codigo_confirmacion} - {usuario_str}'
+
+    def save(self, *args, **kwargs):
+        """
+        Calcula automáticamente el código de confirmación y el total de la estancia.
+        """
+        # 1. Generar código de confirmación único
+        if not self.codigo_confirmacion:
+            self.codigo_confirmacion = str(uuid.uuid4()).split('-')[0].upper()
+
+        # 2. Lógica de cálculo del total
+        if self.fecha_checkin and self.fecha_checkout and self.habitacion:
+            diferencia = self.fecha_checkout - self.fecha_checkin
+            dias = diferencia.days
+            
+            if dias > 0:
+                # Obtención del precio_base desde el modelo Habitacion
+                precio_noche = getattr(self.habitacion, 'precio_base', Decimal('0.00'))
+                
+                if precio_noche is None:
+                    precio_noche = Decimal('0.00')
+                
+                # Cálculo final: Precio x Noches
+                self.total = Decimal(str(precio_noche)) * Decimal(dias)
+            else:
+                self.total = Decimal('0.00')
+
+        super(ReservaHabitacion, self).save(*args, **kwargs)

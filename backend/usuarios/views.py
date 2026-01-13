@@ -1,55 +1,77 @@
 # proyectohotel-backend/usuarios/views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import viewsets
-from rest_framework.permissions import AllowAny # Necesario para el registro público
-from django.contrib.auth.models import User # <-- Usamos el modelo User de Django
+from rest_framework import viewsets, permissions
+from rest_framework.generics import CreateAPIView # Para un registro más limpio
+from rest_framework.permissions import AllowAny 
+from django.contrib.auth.models import User
+from .models import Perfil # Necesario para PerfilViewSet
 
-# Importamos los serializers que creamos
-from .serializers import RegistroUsuarioSerializer, UsuarioAdminSerializer 
-# Importamos las clases de permiso para implementar US-003
-from .permissions import IsAdministrador 
+# Importamos todos los serializers
+from .serializers import RegistroUsuarioSerializer, UsuarioAdminSerializer, PerfilSerializer 
+# Importamos todas las clases de permiso que creamos (¡Corregido!)
+from .permissions import IsAdministrador, IsRecepcionista, IsOwnerOrAdmin 
 
 
 # =========================================================
 # 1. VISTA DE REGISTRO (US-001) - ABIERTA
+# (Usamos CreateAPIView para simplificar la lógica)
 # =========================================================
-class RegistroUsuarioAPIView(APIView):
+class RegisterUserView(CreateAPIView):
     """
-    API para registrar nuevos usuarios (clientes).
-    URL: /api/usuarios/registro/
+    Endpoint para el registro público de nuevos usuarios (rol CLIENTE por defecto).
+    URL: /api/auth/register/
     """
-    # Sobrescribe la configuración global: este endpoint permite el acceso sin autenticación
+    queryset = User.objects.all()
+    serializer_class = RegistroUsuarioSerializer
+    # Permiso: Cualquiera puede acceder para registrarse
     permission_classes = [AllowAny] 
-    
-    def post(self, request):
-        serializer = RegistroUsuarioSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {"mensaje": "Usuario registrado exitosamente. Ahora puede iniciar sesión."}, 
-                status=status.HTTP_201_CREATED
-            )
-        # Retorna los errores de validación si fallan (ej: email duplicado)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # =========================================================
-# 2. VIEWSET DE GESTIÓN (CRUD) - PROTEGIDA POR ROL (US-003)
+# 2. VIEWSET DE GESTIÓN DE USUARIOS (CRUD) - PROTEGIDA POR ROL
+# (Implementa permisos dinámicos con get_permissions)
 # =========================================================
-class UsuarioViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     """
-    ViewSet para el CRUD de usuarios por parte del personal administrativo (Router).
+    Permite la gestión total de usuarios.
+    Permisos: Admin/Recepcionista (listar/crear) y Dueño/Admin (detalles/edición).
     """
-    # Usamos el modelo User de Django (que es el que tiene la seguridad)
-    queryset = User.objects.all() 
-    # Usamos el serializer específico para la administración
-    serializer_class = UsuarioAdminSerializer 
+    # Optimización: Carga el perfil junto con el usuario para evitar consultas N+1
+    queryset = User.objects.all().prefetch_related('perfil').order_by('-date_joined')
+    serializer_class = UsuarioAdminSerializer
     
-    # ----------------------------------------------------
-    # IMPLEMENTACIÓN DEL PERMISO (US-003)
-    # Solo permitirá el acceso si el rol del usuario es 'Administrador'.
-    # ----------------------------------------------------
-    permission_classes = [IsAdministrador]
+    # Lógica de permisos detallada basada en la acción
+    def get_permissions(self):
+        # Listar y Crear usuarios nuevos requiere personal de staff (Recepcionista o Admin)
+        if self.action in ['list', 'create']:
+            self.permission_classes = [IsRecepcionista]
+        # Para ver detalles (retrieve), Actualizar o Eliminar, requiere ser el Dueño O un Administrador
+        elif self.action in ['retrieve', 'update', 'partial_update', 'destroy']:
+            self.permission_classes = [IsOwnerOrAdmin] 
+        else:
+            # Por defecto, cualquier otra acción requiere estar autenticado
+            self.permission_classes = [permissions.IsAuthenticated]
+        return super().get_permissions()
+
+
+# =========================================================
+# 3. VIEWSET DE GESTIÓN DE PERFILES (CRUD) - PROTEGIDA POR ROL
+# (Permite la edición directa de los datos del perfil)
+# =========================================================
+class PerfilViewSet(viewsets.ModelViewSet):
+    """
+    Gestión directa del modelo Perfil. 
+    Usado para que los usuarios puedan editar sus propios datos (teléfono, etc.).
+    """
+    queryset = Perfil.objects.all().select_related('usuario')
+    serializer_class = PerfilSerializer
+
+    def get_permissions(self):
+        # Listar requiere personal de staff (Recepcionista o Admin)
+        if self.action == 'list':
+            self.permission_classes = [IsRecepcionista]
+        # CRUD de objeto requiere ser Dueño O Admin
+        elif self.action in ['retrieve', 'update', 'partial_update', 'destroy']:
+            self.permission_classes = [IsOwnerOrAdmin] 
+        else:
+            self.permission_classes = [permissions.IsAuthenticated]
+        return super().get_permissions()
